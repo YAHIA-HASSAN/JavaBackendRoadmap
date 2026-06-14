@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Backend · 90-Day Roadmap</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --bg:        #0E1117;
+    --bg2:       #161B27;
+    --card:      #1C2333;
+    --card2:     #232B3E;
+    --border:    #2A3550;
+    --muted:     #64748B;
+    --text:      #CBD5E1;
+    --bright:    #F1F5F9;
+
+    --m1:        #2DD4BF;
+    --m1-dim:    #0F3330;
+    --m1-mid:    #14534E;
+    --m2:        #A78BFA;
+    --m2-dim:    #1E1442;
+    --m2-mid:    #3B2680;
+    --m3:        #FB923C;
+    --m3-dim:    #3A1A05;
+    --m3-mid:    #7C3308;
+
+    --green:     #34D399;
+    --green-dim: #0A2E1C;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(14,17,23,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex; align-items: center; gap: 20px;
+    height: 52px;
+  }
+  .logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; font-weight: 700;
+    color: var(--bright);
+    letter-spacing: -0.3px;
+    white-space: nowrap;
+  }
+  .logo span { color: var(--m1); }
+
+  /* Progress bar */
+  .progress-wrap {
+    flex: 1;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .progress-segments {
+    display: flex; gap: 3px; flex: 1;
+  }
+  .prog-seg {
+    flex: 1; height: 6px; border-radius: 2px;
+    background: var(--border);
+    transition: background 0.3s;
+    cursor: pointer;
+  }
+  .prog-seg.done-m1 { background: var(--m1); }
+  .prog-seg.done-m2 { background: var(--m2); }
+  .prog-seg.done-m3 { background: var(--m3); }
+  .prog-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--muted);
+    white-space: nowrap;
+  }
+  .prog-pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700;
+    color: var(--bright);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 36px 24px 24px;
+    max-width: 1400px; margin: 0 auto;
+    display: flex; align-items: flex-start; gap: 32px;
+    flex-wrap: wrap;
+  }
+  .hero-left { flex: 1; min-width: 260px; }
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 2px;
+    color: var(--m1); text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .hero-title {
+    font-size: 28px; font-weight: 700;
+    color: var(--bright);
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+  }
+  .hero-title em { font-style: normal; color: var(--m2); }
+  .hero-sub {
+    margin-top: 10px;
+    color: var(--muted); font-size: 13px;
+    max-width: 420px;
+  }
+
+  /* Stats */
+  .hero-stats {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    min-width: 100px;
+  }
+  .stat-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px; font-weight: 700;
+    color: var(--bright);
+    line-height: 1;
+  }
+  .stat-lbl { font-size: 10px; color: var(--muted); margin-top: 3px; }
+
+  /* Phase legend */
+  .phase-legend {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    align-items: center;
+    padding: 10px 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    align-self: flex-start;
+    margin-top: 4px;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11px; color: var(--text);
+  }
+  .legend-dot {
+    width: 8px; height: 8px; border-radius: 2px;
+  }
+
+  /* ── MAIN GRID ── */
+  .main {
+    max-width: 1400px; margin: 0 auto;
+    padding: 0 24px 60px;
+    display: flex; flex-direction: column; gap: 32px;
+  }
+
+  /* Phase block */
+  .phase-block {}
+  .phase-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 12px;
+  }
+  .phase-bar {
+    height: 2px; flex: 1; border-radius: 1px;
+    opacity: 0.5;
+  }
+  .phase-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+  }
+  .phase-sub { font-size: 11px; color: var(--muted); }
+
+  /* Weeks row */
+  .weeks-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  /* Week card */
+  .week-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    transition: border-color 0.2s, transform 0.15s;
+    position: relative;
+  }
+  .week-card:hover { transform: translateY(-2px); }
+  .week-card.completed { border-color: var(--green); }
+  .week-card.completed .week-head { opacity: 0.7; }
+
+  /* Accent line top */
+  .week-accent {
+    height: 3px; width: 100%;
+  }
+
+  .week-head {
+    padding: 10px 12px 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .week-meta {
+    display: flex; align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .week-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; font-weight: 700;
+    letter-spacing: 1.5px;
+    padding: 2px 7px;
+    border-radius: 3px;
+  }
+  .week-hours {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; color: var(--muted);
+  }
+  .week-title {
+    font-size: 12px; font-weight: 600;
+    color: var(--bright);
+    line-height: 1.3;
+  }
+  .week-badges {
+    display: flex; gap: 4px; flex-wrap: wrap;
+    margin-top: 5px;
+  }
+  .badge {
+    font-size: 9px; font-weight: 600;
+    padding: 1px 6px; border-radius: 3px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .badge-mock { background: #2D1F5E; color: #A78BFA; }
+  .badge-apply { background: #0A2E1C; color: #34D399; }
+  .badge-start { background: #3A1A05; color: #FB923C; }
+
+  /* LinkedIn block */
+  .li-block {
+    margin: 6px 12px 10px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    background: #0A1628;
+    border: 1px solid #0E3460;
+  }
+  .li-header {
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 5px;
+  }
+  .li-icon {
+    width: 14px; height: 14px; border-radius: 3px;
+    background: #0A66C2;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 8px; font-weight: 700; color: white;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .li-title {
+    font-size: 9px; font-weight: 700;
+    color: #4DA6FF; letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+  .li-note {
+    font-size: 9px; color: #64748B;
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .li-posts { display: flex; flex-direction: column; gap: 3px; }
+  .li-post {
+    display: flex; align-items: flex-start; gap: 5px;
+    cursor: pointer;
+    padding: 2px 3px; border-radius: 3px;
+    transition: background 0.1s;
+    user-select: none;
+  }
+  .li-post:hover { background: #0E1E3A; }
+  .li-post.done .li-text { color: var(--muted); text-decoration: line-through; }
+  .li-post.done .cb-box { background: #0A66C2; border-color: #0A66C2; }
+  .li-post.done .cb-box::after {
+    content: '';
+    display: block;
+    width: 5px; height: 3px;
+    border-left: 1.5px solid #0E1117;
+    border-bottom: 1.5px solid #0E1117;
+    transform: rotate(-45deg) translate(1px, -1px);
+  }
+  .li-text { font-size: 10.5px; color: #94B4D4; line-height: 1.4; }
+
+  /* Blocks inside card */
+  .week-body { padding: 8px 12px; flex: 1; }
+
+  .block-label {
+    font-size: 9px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 1px;
+    color: var(--muted);
+    margin: 8px 0 4px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .block-label::after {
+    content: ''; flex: 1; height: 1px;
+    background: var(--border);
+  }
+  .block-label:first-child { margin-top: 2px; }
+
+  /* Task list */
+  .task-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+  .task-item {
+    display: flex; align-items: flex-start; gap: 6px;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: background 0.1s;
+    user-select: none;
+  }
+  .task-item:hover { background: var(--card2); }
+  .task-item.done .task-text {
+    color: var(--muted);
+    text-decoration: line-through;
+  }
+  .task-item.done .cb-box { background: var(--green); border-color: var(--green); }
+  .task-item.done .cb-box::after {
+    content: '';
+    display: block;
+    width: 5px; height: 3px;
+    border-left: 1.5px solid #0E1117;
+    border-bottom: 1.5px solid #0E1117;
+    transform: rotate(-45deg) translate(1px, -1px);
+  }
+
+  .cb-box {
+    width: 12px; height: 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .task-text { font-size: 11.5px; color: var(--text); line-height: 1.4; }
+
+  /* Hours block inside card */
+  .hours-block {
+    display: flex; align-items: center; gap: 6px;
+    padding: 4px 6px;
+    border-radius: 5px;
+    margin: 3px 0;
+  }
+  .hours-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; font-weight: 700;
+  }
+  .hours-subject { font-size: 11px; color: var(--text); }
+
+  /* Goal */
+  .week-goal {
+    margin: 8px 12px 10px;
+    padding: 7px 10px;
+    border-radius: 6px;
+    border-left: 2px solid;
+    font-size: 10.5px;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  .week-goal strong {
+    display: block;
+    font-size: 9px; text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 2px;
+    font-weight: 700;
+  }
+
+  /* Completion badge on card */
+  .done-overlay {
+    position: absolute; top: 8px; right: 8px;
+    width: 18px; height: 18px;
+    background: var(--green);
+    border-radius: 50%;
+    display: none;
+    align-items: center; justify-content: center;
+  }
+  .done-overlay svg { width: 10px; height: 10px; }
+  .week-card.completed .done-overlay { display: flex; }
+
+  /* ── RESET BTN ── */
+  .reset-btn {
+    position: fixed; bottom: 20px; right: 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 6px 12px; border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { border-color: var(--muted); color: var(--text); }
+
+  @media (max-width: 900px) {
+    .weeks-row { grid-template-columns: repeat(2, 1fr); }
+    .hero { flex-direction: column; gap: 20px; }
+  }
+  @media (max-width: 500px) {
+    .weeks-row { grid-template-columns: 1fr; }
+    .site-header { padding: 0 12px; }
+    .main { padding: 0 12px 40px; }
+    .hero { padding: 20px 12px 16px; }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="site-header">
+  <div class="logo">// <span>java</span>_roadmap</div>
+  <div class="progress-wrap">
+    <div class="progress-segments" id="progBar"></div>
+    <div class="prog-label">progress</div>
+    <div class="prog-pct" id="progPct">0%</div>
+  </div>
+</header>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">90-Day Plan · Junior Java Backend</div>
+    <h1 class="hero-title">From foundations<br>to first <em>offer</em></h1>
+    <p class="hero-sub">8 hours/day · 3 months · 1 project · Start applying Week 8</p>
+    <div class="hero-stats">
+      <div class="stat-card">
+        <div class="stat-num">90</div>
+        <div class="stat-lbl">Days total</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">12</div>
+        <div class="stat-lbl">Weeks</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">8h</div>
+        <div class="stat-lbl">Per day max</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="doneStat">0</div>
+        <div class="stat-lbl">Tasks done</div>
+      </div>
+    </div>
+  </div>
+  <div class="phase-legend">
+    <div style="font-size:10px;color:var(--muted);font-weight:600;width:100%;margin-bottom:4px">PHASES</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--m1)"></div>Month 1 · Java Core + SQL</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--m2)"></div>Month 2 · Spring Boot</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--m3)"></div>Month 3 · Project + Deploy</div>
+    <div style="width:100%;height:1px;background:var(--border);margin:4px 0"></div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Completed week</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#A78BFA"></div>Mock Interview week</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#34D399"></div>Start applying</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#0A66C2"></div>LinkedIn posts (every week)</div>
+  </div>
+</section>
+
+<!-- ── MAIN ── -->
+<main class="main" id="mainGrid"></main>
+
+<button class="reset-btn" onclick="resetAll()">⌫ Reset all</button>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────────────────────
+const PHASES = [
+  {
+    label: "Month 1", sub: "Java Core + SQL Foundation",
+    color: "var(--m1)", dim: "var(--m1-dim)", mid: "var(--m1-mid)",
+    key: "m1",
+    weeks: [
+      {
+        wk: 1, title: "Java OOP + Git + Problem Solving",
+        tags: [], goal: "Explain every OOP pillar with a code example",
+        blocks: [
+          { label: "4h · Java OOP", hours: "4h", tasks: ["OOP Revision", "Interfaces", "Abstract Classes", "Access Modifiers", "Inner Classes"] },
+          { label: "2h · Git + Linux", hours: "2h", tasks: ["Git basics & branching", "Gitflow workflow", "Linux basics & CLI", "File & directory commands"] },
+          { label: "2h · Problem Solving", hours: "2h", tasks: ["2-3 LeetCode Easy (Java)", "Focus on array & string problems"] },
+        ]
+      },
+      {
+        wk: 2, title: "Collections + Generics + SOLID",
+        tags: [], goal: "Build a mini-app using ArrayList, HashMap, Set together",
+        blocks: [
+          { label: "4h · Collections + Generics", hours: "4h", tasks: ["ArrayList & LinkedList", "HashSet & TreeSet", "HashMap & LinkedHashMap", "Generics (T, E, K, V)", "Bounded types & Wildcard <?>"] },
+          { label: "2h · SOLID + Clean Code", hours: "2h", tasks: ["Single Responsibility", "Open/Closed Principle", "Liskov Substitution", "Interface Segregation", "Dependency Inversion"] },
+          { label: "2h · Problem Solving", hours: "2h", tasks: ["3 problems/day", "Collections-focused challenges"] },
+        ]
+      },
+      {
+        wk: 3, title: "Streams + Exceptions + Design Patterns",
+        tags: ["mock"], goal: "Write a Stream pipeline replacing a for-loop + Custom Exception Handler — Mock Interview #1",
+        blocks: [
+          { label: "3h · Streams + Exceptions", hours: "3h", tasks: ["Lambda Expressions", "Stream: filter / map / reduce", "Collectors", "Checked vs Unchecked Exceptions", "Custom Exceptions", "try-catch-finally"] },
+          { label: "2h · Design Patterns", hours: "2h", tasks: ["Singleton pattern", "Factory pattern", "Strategy pattern", "When to use each"] },
+          { label: "1h · Logging", hours: "1h", tasks: ["Logging basics (SLF4J)", "Log levels: INFO, WARN, ERROR"] },
+          { label: "2h · Problem Solving", hours: "2h", tasks: ["3 problems/day", "Mock Interview: Java Core Q&A"] },
+        ]
+      },
+      {
+        wk: 4, title: "SQL + DB Design + HTTP Basics",
+        tags: [], goal: "Hotel Booking DB schema designed + HTTP request lifecycle explained",
+        blocks: [
+          { label: "4h · SQL", hours: "4h", tasks: ["SELECT, WHERE, ORDER BY", "GROUP BY & HAVING", "INNER / LEFT / RIGHT JOIN", "Subqueries & Aggregate Functions", "Indexes & Transactions", "ACID properties"] },
+          { label: "2h · Database Design", hours: "2h", tasks: ["Normalization 1NF–3NF", "Hotel Booking schema design", "ER Diagram"] },
+          { label: "2h · HTTP + Networking", hours: "2h", tasks: ["HTTP vs HTTPS", "TCP basics", "Request / Response lifecycle", "REST principles", "Status codes (2xx, 4xx, 5xx)"] },
+        ]
+      },
+    ]
+  },
+  {
+    label: "Month 2", sub: "Spring Boot · Build the stack",
+    color: "var(--m2)", dim: "var(--m2-dim)", mid: "var(--m2-mid)",
+    key: "m2",
+    weeks: [
+      {
+        wk: 5, title: "Spring Core + First CRUD API",
+        tags: ["mock"], goal: "Full CRUD API running and pushed to GitHub — Mock Interview #2",
+        blocks: [
+          { label: "5h · Spring Core", hours: "5h", tasks: ["Maven & pom.xml", "Spring Boot setup & Starters", "IoC Container", "Dependency Injection", "@Component / @Service / @Repository", "Bean Lifecycle", "@Autowired & Constructor DI", "@RestController & Mappings"] },
+          { label: "3h · CRUD Project", hours: "3h", tasks: ["Build full CRUD API", "Test with Postman", "Push to GitHub", "Write basic README"] },
+        ]
+      },
+      {
+        wk: 6, title: "JPA + Hibernate · Start Hotel Project",
+        tags: ["start"], goal: "Hotel project on GitHub with full schema & JPA entities",
+        blocks: [
+          { label: "5h · JPA + Hibernate", hours: "5h", tasks: ["@Entity, @Table, @Id", "@GeneratedValue strategies", "Hibernate internals", "JpaRepository & custom @Query", "Derived query methods", "@Transactional", "@OneToMany / @ManyToMany", "Cascade & FetchType (LAZY vs EAGER)"] },
+          { label: "3h · Hotel Booking Project", hours: "3h", tasks: ["Project structure (layered arch)", "DB schema: users, hotels, rooms, bookings, reviews", "JPA Entities + Enums (RoomType, Role)", "Base CRUD endpoints for Hotels & Rooms"] },
+        ]
+      },
+      {
+        wk: 7, title: "DTO + Validation + Git Workflow",
+        tags: ["mock"], goal: "API uses DTOs, validation, and clean error responses — Mock Interview #3",
+        blocks: [
+          { label: "4h · DTO + Validation + Exceptions", hours: "4h", tasks: ["DTOs (Data Transfer Objects)", "ModelMapper / MapStruct", "@Valid, @NotNull, @Size", "Global Exception Handler (@ControllerAdvice)", "Custom Error Response body", "Pagination & Sorting (Pageable)"] },
+          { label: "2h · Git Workflow", hours: "2h", tasks: ["Feature branching", "Pull Requests & code review", "Commit message conventions", "Git rebase vs merge"] },
+          { label: "2h · Project", hours: "2h", tasks: ["Apply DTOs to Hotel project", "Add pagination to listings", "Handle all error cases"] },
+        ]
+      },
+      {
+        wk: 8, title: "Spring Security + JWT · Apply Now",
+        tags: ["apply"], goal: "Login API with JWT working · Start sending CVs",
+        blocks: [
+          { label: "5h · Spring Security + JWT", hours: "5h", tasks: ["SecurityFilterChain setup", "@EnableWebSecurity", "CSRF & CORS configuration", "JWT structure (header.payload.sig)", "JwtUtil class", "Token generation & validation", "JwtAuthFilter", "UserDetailsService", "@PreAuthorize roles"] },
+          { label: "3h · Project", hours: "3h", tasks: ["Integrate JWT into Hotel project", "ADMIN vs USER roles", "Protect all endpoints", "Test auth flow in Postman"] },
+        ]
+      },
+    ]
+  },
+  {
+    label: "Month 3", sub: "Ship the Project · Get the Interview",
+    color: "var(--m3)", dim: "var(--m3-dim)", mid: "var(--m3-mid)",
+    key: "m3",
+    weeks: [
+      {
+        wk: 9, title: "Project — Core Business Logic",
+        tags: ["mock"], goal: "Booking system fully working — Mock Interview #4",
+        blocks: [
+          { label: "6h · Project", hours: "6h", tasks: ["Booking API: Create & Cancel", "Availability check logic", "Prevent double-booking", "Room search (date / type / price)", "Reviews API & rating calculation", "Admin APIs: manage hotels & rooms", "Pagination on all list endpoints"] },
+          { label: "2h · Interview Prep", hours: "2h", tasks: ["Java Q&A: Interface vs Abstract, HashMap internals", "equals() vs ==, String vs StringBuilder", "Checked vs Unchecked Exceptions", "Mock interview practice"] },
+        ]
+      },
+      {
+        wk: 10, title: "Testing + Concurrency Basics",
+        tags: [], goal: "Service layer tests written · Concurrency basics understood",
+        blocks: [
+          { label: "5h · Project", hours: "5h", tasks: ["Postman collection: test all endpoints", "Fix bugs from testing", "Error handling review", "Polish API responses"] },
+          { label: "1h · Testing", hours: "1h", tasks: ["JUnit 5 basics", "@SpringBootTest", "Test Service Layer", "Mockito basics"] },
+          { label: "2h · Concurrency Basics", hours: "2h", tasks: ["Thread & Runnable", "ExecutorService basics", "synchronized keyword", "Basics only — theory level"] },
+        ]
+      },
+      {
+        wk: 11, title: "Docker + Testing",
+        tags: ["mock", "apply"], goal: "App containerized — Mock Interview #5 · Apply to 5+ companies",
+        blocks: [
+          { label: "4h · Docker", hours: "4h", tasks: ["What is containerization", "Dockerfile for Spring Boot", "docker-compose (App + PostgreSQL)", "Local deploy with Docker", "Environment variables in containers"] },
+          { label: "2h · Testing", hours: "2h", tasks: ["Login integration test", "Write tests for Booking logic", "Test edge cases"] },
+          { label: "2h · Project", hours: "2h", tasks: ["Apply Docker to Hotel project", "Test full docker-compose stack", "Fix remaining issues"] },
+        ]
+      },
+      {
+        wk: 12, title: "Deploy + Swagger + Final Push",
+        tags: ["apply"], goal: "Project live online · README complete · Interviews booked",
+        blocks: [
+          { label: "3h · Deployment", hours: "3h", tasks: ["Deploy on Railway or Render (free)", "Configure environment variables", "Test production URL", "Troubleshoot deployment issues"] },
+          { label: "2h · Swagger", hours: "2h", tasks: ["SpringDoc OpenAPI setup", "Annotate all endpoints", "Generate interactive API docs", "Final README: arch + setup + endpoints"] },
+          { label: "3h · Interview Prep", hours: "3h", tasks: ["Spring Q&A: IoC, DI, JPA, Security, JWT", "SQL Q&A: Joins, Indexes, Transactions", "Behavioral questions", "Send CV to 10+ companies", "Polish LinkedIn & GitHub profile"] },
+        ]
+      },
+    ]
+  },
+];
+
+// ── STATE ────────────────────────────────────────────────────────────────────
+function loadState() {
+  try { return JSON.parse(localStorage.getItem('roadmap_state') || '{}'); } catch { return {}; }
+}
+function saveState(s) {
+  try { localStorage.setItem('roadmap_state', JSON.stringify(s)); } catch {}
+}
+let STATE = loadState();
+
+// ── RENDER ───────────────────────────────────────────────────────────────────
+const main = document.getElementById('mainGrid');
+
+PHASES.forEach(phase => {
+  const section = document.createElement('section');
+  section.className = 'phase-block';
+
+  section.innerHTML = `
+    <div class="phase-header">
+      <span class="phase-label" style="color:${phase.color}">${phase.label}</span>
+      <span class="phase-sub">${phase.sub}</span>
+      <div class="phase-bar" style="background:linear-gradient(90deg,${phase.color}33,transparent)"></div>
+    </div>
+    <div class="weeks-row" id="weeks-${phase.key}"></div>
+  `;
+  main.appendChild(section);
+
+  const row = section.querySelector(`#weeks-${phase.key}`);
+
+  phase.weeks.forEach(week => {
+    const cardId = `w${week.wk}`;
+
+    // collect all tasks for this week
+    const allTasks = week.blocks.flatMap((b,bi) =>
+      b.tasks.map((t,ti) => ({ key: `${cardId}_${bi}_${ti}`, text: t }))
+    );
+
+    const card = document.createElement('div');
+    card.className = 'week-card';
+    card.id = cardId;
+
+    // badges html
+    const badgesHtml = week.tags.map(t => {
+      if (t === 'mock') return `<span class="badge badge-mock">⚡ Mock Interview</span>`;
+      if (t === 'apply') return `<span class="badge badge-apply">🚀 Apply Now</span>`;
+      if (t === 'start') return `<span class="badge badge-start">▶ Project Start</span>`;
+      return '';
+    }).join('');
+
+    // blocks html
+    const blocksHtml = week.blocks.map((b, bi) => {
+      const tasksHtml = b.tasks.map((t, ti) => {
+        const key = `${cardId}_${bi}_${ti}`;
+        return `<li class="task-item" data-key="${key}" onclick="toggleTask('${key}','${cardId}')">
+          <div class="cb-box"></div>
+          <span class="task-text">${t}</span>
+        </li>`;
+      }).join('');
+      return `
+        <div class="block-label">${b.label}</div>
+        <ul class="task-list">${tasksHtml}</ul>
+      `;
+    }).join('');
+
+    // LinkedIn posts keys
+    const liKeys = [`${cardId}_li_0`, `${cardId}_li_1`];
+    const liPostsHtml = [
+      { key: liKeys[0], text: "Post 1 — Something I learned this week (concept, trick, or insight)" },
+      { key: liKeys[1], text: "Post 2 — A bug I fixed OR a feature I shipped (show code snippet)" },
+    ].map(p => `
+      <div class="li-post" data-key="${p.key}" onclick="toggleTask('${p.key}','${cardId}')">
+        <div class="cb-box"></div>
+        <span class="li-text">${p.text}</span>
+      </div>`).join('');
+
+    card.innerHTML = `
+      <div class="week-accent" style="background:${phase.color}"></div>
+      <div class="week-head">
+        <div class="week-meta">
+          <span class="week-num" style="background:${phase.dim};color:${phase.color}">WEEK ${week.wk}</span>
+          <span class="week-hours">8h/day</span>
+        </div>
+        <div class="week-title">${week.title}</div>
+        ${badgesHtml ? `<div class="week-badges">${badgesHtml}</div>` : ''}
+      </div>
+      <div class="week-body">${blocksHtml}</div>
+      <div class="li-block">
+        <div class="li-header">
+          <div class="li-icon">in</div>
+          <span class="li-title">LinkedIn Posts</span>
+          <span class="li-note">~15 min each</span>
+        </div>
+        <div class="li-posts">${liPostsHtml}</div>
+      </div>
+      <div class="week-goal" style="background:${phase.dim};border-color:${phase.color}">
+        <strong style="color:${phase.color}">✓ week goal</strong>
+        ${week.goal}
+      </div>
+      <div class="done-overlay">
+        <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#0E1117" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    `;
+
+    row.appendChild(card);
+  });
+});
+
+// ── INTERACTIONS ─────────────────────────────────────────────────────────────
+function toggleTask(key, cardId) {
+  STATE[key] = !STATE[key];
+  saveState(STATE);
+  const el = document.querySelector(`[data-key="${key}"]`);
+  if (el) el.classList.toggle('done', STATE[key]);
+  updateCard(cardId);
+  updateProgress();
+}
+
+function updateCard(cardId) {
+  const card = document.getElementById(cardId);
+  if (!card) return;
+  const items = card.querySelectorAll('.task-item, .li-post');
+  const done = [...items].filter(t => STATE[t.dataset.key]).length;
+  card.classList.toggle('completed', done === items.length && items.length > 0);
+}
+
+function updateProgress() {
+  const allTasks = document.querySelectorAll('.task-item, .li-post');
+  const total = allTasks.length;
+  const done = [...allTasks].filter(t => STATE[t.dataset.key]).length;
+  const pct = total ? Math.round(done / total * 100) : 0;
+
+  document.getElementById('progPct').textContent = pct + '%';
+  document.getElementById('doneStat').textContent = done;
+
+  // Update segments
+  const segs = document.querySelectorAll('.prog-seg');
+  const weeks = document.querySelectorAll('.week-card');
+  segs.forEach((seg, i) => {
+    const card = weeks[i];
+    if (!card) return;
+    const cardTasks = card.querySelectorAll('.task-item, .li-post');
+    const cardDone = [...cardTasks].filter(t => STATE[t.dataset.key]).length;
+    const isComplete = cardDone === cardTasks.length && cardTasks.length > 0;
+    const phaseKey = i < 4 ? 'done-m1' : i < 8 ? 'done-m2' : 'done-m3';
+    seg.className = 'prog-seg' + (isComplete ? ` ${phaseKey}` : '');
+  });
+}
+
+function applyState() {
+  document.querySelectorAll('.task-item, .li-post').forEach(el => {
+    if (STATE[el.dataset.key]) el.classList.add('done');
+  });
+  document.querySelectorAll('.week-card').forEach(card => updateCard(card.id));
+  updateProgress();
+}
+
+function resetAll() {
+  if (!confirm('Reset all progress? This cannot be undone.')) return;
+  STATE = {};
+  saveState(STATE);
+  document.querySelectorAll('.task-item, .li-post').forEach(el => el.classList.remove('done'));
+  document.querySelectorAll('.week-card').forEach(card => card.classList.remove('completed'));
+  updateProgress();
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+// Build progress bar segments (12 weeks)
+const progBar = document.getElementById('progBar');
+for (let i = 0; i < 12; i++) {
+  const seg = document.createElement('div');
+  seg.className = 'prog-seg';
+  seg.title = `Week ${i+1}`;
+  seg.onclick = () => document.getElementById(`w${i+1}`)?.scrollIntoView({behavior:'smooth', block:'center'});
+  progBar.appendChild(seg);
+}
+
+applyState();
+</script>
+</body>
+</html>
