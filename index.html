@@ -739,6 +739,7 @@ function updateProgress() {
 
   document.getElementById('progPct').textContent = pct + '%';
   document.getElementById('doneStat').textContent = done;
+  document.getElementById('doneStat').textContent+= '/' + allTasks.length;
 
   // Update segments
   const segs = document.querySelectorAll('.prog-seg');
